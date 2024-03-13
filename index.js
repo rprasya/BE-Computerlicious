@@ -1,7 +1,7 @@
-// First to do, import library
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const { prisma } = require("./config/prisma");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +15,12 @@ app.get("/", async (req, res) => {
   res.send("Routes success");
 });
 
-// Create response for error or missing route
+// catalog routes
+app.get("/catalogs", async (req, res) => {
+  const catalog = await prisma.catalog.findMany();
+  res.status(200).send(catalog);
+});
+
 app.all("*", async (req, res) => {
   res.json({
     message: "Routes you're looking is not found",
