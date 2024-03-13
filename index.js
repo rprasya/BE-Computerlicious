@@ -25,12 +25,24 @@ app.get("/catalogs", async (req, res) => {
 
 // get catalog by id
 app.get("/catalogs/:id", async (req, res) => {
-  const catalog = await prisma.catalog.findUnique({
+  const catalogs = await prisma.catalog.findUnique({
     where: {
-      id: req.params.id,
+      id: parseInt(req.params.id),
     },
   });
+  if (!catalogs) res.status(404).send("Catalog not found");
   res.status(200).send(catalogs);
+});
+
+// get product by id
+app.get("/products/:id", async (req, res) => {
+  const products = await prisma.product.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+  });
+  if (!products) res.status(404).send("Product not found");
+  res.status(200).send(products);
 });
 
 app.all("*", async (req, res) => {
