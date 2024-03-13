@@ -25,10 +25,11 @@ app.get("/catalogs", async (req, res) => {
 app.get("/catalogs/:id", async (req, res) => {
   const catalog = await prisma.catalog.findUnique({
     where: {
-      id: req.params.id,
+      id: parseInt(req.params.id),
     },
   });
-  res.status(200).send(catalogs);
+  if(!catalog) res.status(404).send("Catalog not found")
+  res.status(200).send(catalog);
 });
 
 app.all("*", async (req, res) => {
