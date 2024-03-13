@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// add your model here
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  price Int
+  imageUrl String? // arti dikasih "?" not required
+  catalogId Int?
+  createdAt DateTime @default(now())
+  // untuk menambahkan relasi dari product ke catalog, dimana product boleh gapunya catalog
+  Catalog Catalog? @relation(fields: [catalogId], references: [id])
+}
+
+model Catalog {
+  id Int @id @default(autoincrement())
+  name String
+  // untuk nambahin relasi antar catalog dengan product
+  products Product[] // [] artinya 1 catalog punya banyak product
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  message String @db.Text
+  createdAt DateTime @default(now())
+}
