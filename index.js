@@ -15,10 +15,22 @@ app.get("/", async (req, res) => {
   res.send("Routes success");
 });
 
-// catalog routes
+// catalog
+
+// get all catalog routes
 app.get("/catalogs", async (req, res) => {
   const catalog = await prisma.catalog.findMany();
   res.status(200).send(catalog);
+});
+
+// get catalog by id
+app.get("/catalogs/:id", async (req, res) => {
+  const catalog = await prisma.catalog.findUnique({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.status(200).send(catalogs);
 });
 
 app.all("*", async (req, res) => {
@@ -27,7 +39,6 @@ app.all("*", async (req, res) => {
   });
 });
 
-// Create response for route
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is already running at ${PORT}`);
 });
