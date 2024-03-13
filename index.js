@@ -30,8 +30,11 @@ app.get("/catalogs/:id", async (req, res) => {
       id: parseInt(req.params.id),
     },
   });
-  if (!catalogs) res.status(404).send("Catalog not found");
-  res.status(200).send(catalogs);
+  if (!catalog)
+    res.status(404).json({
+      message: "Catalog not found",
+    });
+  res.status(200).send(catalog);
 });
 
 // get product by id
