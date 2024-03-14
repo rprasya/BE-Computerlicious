@@ -37,6 +37,17 @@ app.get("/catalogs/:id", async (req, res) => {
   res.status(200).send(catalog);
 });
 
+// get subCatalog by id
+app.get("/subCatalogs/:id", async (req, res) => {
+  const subCatalogs = await prisma.subCatalog.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+  });
+  if (!subCatalogs) res.status(404).send("subProduct not found");
+  res.status(200).send(subCatalogs);
+});
+
 // get product by id
 app.get("/products/:id", async (req, res) => {
   const products = await prisma.product.findUnique({

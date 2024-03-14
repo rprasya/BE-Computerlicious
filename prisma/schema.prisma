@@ -21,16 +21,26 @@ model Product {
   price Int
   imageUrl String? // arti dikasih "?" not required
   catalogId Int?
+  subCatalogId Int?
   createdAt DateTime @default(now())
   // untuk menambahkan relasi dari product ke catalog, dimana product boleh gapunya catalog
+  subCatalog subCatalog? @relation(fields: [subCatalogId], references: [id])
   Catalog Catalog? @relation(fields: [catalogId], references: [id])
+}
+
+model subCatalog {
+  id Int @id @default(autoincrement())
+  name String
+  catalogId Int?
+  Catalog Catalog? @relation(fields: [catalogId], references: [id])
+  products Product[] // 1 subCatalog bisa punya banyak Product
 }
 
 model Catalog {
   id Int @id @default(autoincrement())
   name String
-  // untuk nambahin relasi antar catalog dengan product
-  products Product[] // [] artinya 1 catalog punya banyak product
+  products Product[]
+  subCatalog subCatalog[] // 1 Catalog bisa punya banyak subCatalog
 }
 
 model Message {
