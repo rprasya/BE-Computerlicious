@@ -35,6 +35,21 @@ app.get("/catalogs/:id", async (req, res) => {
   res.status(200).send(catalog);
 });
 
+// create catalog
+app.post("/catalogs", async (req, res) => {
+  const { name } = req.body;
+  if (!name) res.status(400).json({ message: "Name is required" });
+  const newCatalog = await prisma.catalog.create({
+    data: {
+      name: name,
+    },
+  });
+  res.status(201).json({
+    message: "Catalog Created",
+    data: newCatalog,
+  })
+});
+
 app.all("*", async (req, res) => {
   res.json({
     message: "Routes you're looking is not found",
