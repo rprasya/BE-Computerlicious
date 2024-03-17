@@ -47,7 +47,7 @@ app.post("/catalogs", async (req, res) => {
   res.status(201).json({
     message: "Catalog Created",
     data: newCatalog,
-  })
+  });
 });
 
 // update catalog
@@ -56,13 +56,26 @@ app.put("/catalogs/:id", async (req, res) => {
   const { name } = req.body;
   const updatedCatalog = await prisma.catalog.update({
     where: { id: parseInt(id) },
-    data: {name: name},
-  })
+    data: { name: name },
+  });
   res.status(200).json({
-    message : `catalog with id: ${id} is updated`,
+    message: `catalog with id: ${id} is updated`,
     data: updatedCatalog,
-  })
-})
+  });
+});
+
+// delete catalog
+  app.delete("/catalogs/:id", async (req, res) => {
+    const { id } = req.params;
+    await prisma.catalog.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(200).json({
+      message: `product with id ${id} successfully deleted`,
+    });
+  });
 
 app.all("*", async (req, res) => {
   res.json({
