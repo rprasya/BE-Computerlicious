@@ -37,26 +37,19 @@ app.get("/catalogs/:id", async (req, res) => {
   res.status(200).send(catalog);
 });
 
-// get subCatalog by id
-app.get("/subCatalogs/:id", async (req, res) => {
-  const subCatalogs = await prisma.subCatalog.findUnique({
-    where: {
-      id: parseInt(req.params.id),
+// create catalog
+app.post("/catalogs", async (req, res) => {
+  const { name } = req.body;
+  if (!name) res.status(400).json({ message: "Name is required" });
+  const newCatalog = await prisma.catalog.create({
+    data: {
+      name: name,
     },
   });
-  if (!subCatalogs) res.status(404).send("subProduct not found");
-  res.status(200).send(subCatalogs);
-});
-
-// get product by id
-app.get("/products/:id", async (req, res) => {
-  const products = await prisma.product.findUnique({
-    where: {
-      id: parseInt(req.params.id),
-    },
+  res.status(201).json({
+    message: "Catalog Created",
+    data: newCatalog,
   });
-  if (!products) res.status(404).send("Product not found");
-  res.status(200).send(products);
 });
 
 app.all("*", async (req, res) => {
